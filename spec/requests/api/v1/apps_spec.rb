@@ -111,4 +111,27 @@ RSpec.describe "Api::V1::Apps", type: :request do
       end
     end
   end
+
+  describe "DELETE /destroy" do
+    context "when the parameters are valid" do
+      it "returns status code 204" do
+        app = create(:app)
+        delete(api_v1_app_path(app), params: {}, headers:)
+        expect(response).to have_http_status(204)
+      end
+
+      it "removes the app from database" do
+        app = create(:app)
+        delete(api_v1_app_path(app), params: {}, headers:)
+        expect(App.find_by(id: app.id)).to be_nil
+      end
+    end
+
+    context "when the app does not exist" do
+      it "returns status code 404" do
+        delete(api_v1_app_path(0), params: {}, headers:)
+        expect(response).to have_http_status(404)
+      end
+    end
+  end
 end

@@ -1,7 +1,7 @@
 module Api
   module V1
     class AppsController < ApplicationController
-      before_action :set_app, only: %i[show update]
+      before_action :set_app, only: %i[show update destroy]
 
       def index
         app = App.all
@@ -28,6 +28,11 @@ module Api
         else
           render json: { errors: @app.errors }, status: :unprocessable_entity
         end
+      end
+
+      def destroy
+        @app.destroy
+        head 204
       end
 
       private
