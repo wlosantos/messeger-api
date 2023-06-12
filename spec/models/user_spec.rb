@@ -28,4 +28,27 @@ RSpec.describe User, type: :model do
       it { is_expected.to validate_uniqueness_of(:fractal_id).ignoring_case_sensitivity }
     end
   end
+
+  describe "create user" do
+    context "successfully" do
+      let!(:user) { build(:user) }
+      it { expect(user).to be_valid }
+    end
+
+    context "failure - incompleted data" do
+      let!(:user) { build(:user, email: nil) }
+      it { expect(user).not_to be_valid }
+    end
+
+    context "failure - duplicated data" do
+      let!(:user) { create(:user) }
+      let!(:user2) { build(:user, email: user.email) }
+      it { expect(user2).not_to be_valid }
+    end
+
+    context "failure - invalid email" do
+      let(:user) { build(:user, email: "invalid_email") }
+      it { expect(user).not_to be_valid }
+    end
+  end
 end
