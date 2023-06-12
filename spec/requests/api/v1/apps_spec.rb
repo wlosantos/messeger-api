@@ -23,4 +23,27 @@ RSpec.describe "Api::V1::Apps", type: :request do
       end
     end
   end
+
+  describe "GET /show" do
+    context "successfully" do
+      it "returns status code success" do
+        app = create(:app)
+        get(api_v1_app_path(app), params: {}, headers:)
+        expect(response).to have_http_status(:success)
+      end
+
+      it "returns a app" do
+        app = create(:app)
+        get(api_v1_app_path(app), params: {}, headers:)
+        expect(json_body[:data][:attributes][:name]).to eq(app.name)
+      end
+    end
+
+    context "when the app does not exist" do
+      it "returns status code 404" do
+        get(api_v1_app_path(0), params: {}, headers:)
+        expect(response).to have_http_status(404)
+      end
+    end
+  end
 end

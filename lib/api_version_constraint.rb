@@ -5,6 +5,6 @@ class ApiVersionConstraint
   end
 
   def matches?(req)
-    @default || req.headers['Accept'].include?("application/vnd.messeger-api.v#{@version}")
+    @default || req.headers['Accept'].include?("application/vnd.messeger-fractal.v#{@version}")
   end
 end
