@@ -76,4 +76,39 @@ RSpec.describe "Api::V1::Apps", type: :request do
       end
     end
   end
+
+  describe "PUT /update" do
+    context "when the parameters are valid" do
+      it "returns status code 200" do
+        app = create(:app)
+        put(api_v1_app_path(app), params: { app: { name: "New name" } }.to_json, headers:)
+        expect(response).to have_http_status(200)
+      end
+
+      it "returns the json for updated app" do
+        app = create(:app)
+        put(api_v1_app_path(app), params: { app: { name: "New name" } }.to_json, headers:)
+        expect(json_body[:data][:attributes][:name]).to eq("New name")
+      end
+    end
+
+    context "when the parameters are invalid" do
+      it "returns status code 422" do
+        app = create(:app)
+        put(api_v1_app_path(app), params: { app: { name: nil } }.to_json, headers:)
+        expect(response).to have_http_status(422)
+      end
+
+      it "returns the json error for name" do
+        app = create(:app)
+        put(api_v1_app_path(app), params: { app: { name: nil } }.to_json, headers:)
+        expect(json_body[:errors]).to have_key(:name)
+      end
+
+      it "when the app does not exist" do
+        put(api_v1_app_path(0), params: { app: { name: "New name" } }.to_json, headers:)
+        expect(response).to have_http_status(404)
+      end
+    end
+  end
 end

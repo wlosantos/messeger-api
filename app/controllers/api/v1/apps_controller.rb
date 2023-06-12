@@ -1,7 +1,7 @@
 module Api
   module V1
     class AppsController < ApplicationController
-      before_action :set_app, only: [:show]
+      before_action :set_app, only: %i[show update]
 
       def index
         app = App.all
@@ -22,10 +22,18 @@ module Api
         end
       end
 
+      def update
+        if @app.update(app_params)
+          render json: @app, status: :ok
+        else
+          render json: { errors: @app.errors }, status: :unprocessable_entity
+        end
+      end
+
       private
 
       def set_app
-        App.find(params[:id])
+        @app = App.find(params[:id])
       rescue ActiveRecord::RecordNotFound
         head 404
       end
