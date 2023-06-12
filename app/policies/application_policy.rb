@@ -36,6 +36,14 @@ class ApplicationPolicy
     false
   end
 
+  def permissions?
+    user.has_role?(:admin)
+  end
+
+  def scope
+    Pundit.policy_scope!(user, record.class)
+  end
+
   class Scope
     def initialize(user, scope)
       @user = user
