@@ -46,4 +46,34 @@ RSpec.describe "Api::V1::Apps", type: :request do
       end
     end
   end
+
+  describe "POST /create" do
+    context "when the parameters are valid" do
+      it "returns status code 201" do
+        app = build(:app)
+        post(api_v1_apps_path, params: { app: app.attributes }.to_json, headers:)
+        expect(response).to have_http_status(201)
+      end
+
+      it "returns the json for created app" do
+        app = build(:app)
+        post(api_v1_apps_path, params: { app: app.attributes }.to_json, headers:)
+        expect(json_body[:data][:attributes][:name]).to eq(app.name)
+      end
+    end
+
+    context "when the parameters are invalid" do
+      it "returns status code 422" do
+        app = build(:app, name: nil)
+        post(api_v1_apps_path, params: { app: app.attributes }.to_json, headers:)
+        expect(response).to have_http_status(422)
+      end
+
+      it "returns the json error for name" do
+        app = build(:app, name: nil)
+        post(api_v1_apps_path, params: { app: app.attributes }.to_json, headers:)
+        expect(json_body[:errors]).to have_key(:name)
+      end
+    end
+  end
 end

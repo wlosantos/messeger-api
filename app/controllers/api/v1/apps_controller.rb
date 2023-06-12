@@ -13,12 +13,25 @@ module Api
         render json: app, status: :ok
       end
 
+      def create
+        app = App.new(app_params)
+        if app.save
+          render json: app, status: :created
+        else
+          render json: { errors: app.errors }, status: :unprocessable_entity
+        end
+      end
+
       private
 
       def set_app
         App.find(params[:id])
       rescue ActiveRecord::RecordNotFound
         head 404
+      end
+
+      def app_params
+        params.require(:app).permit(:name, :app_id)
       end
     end
   end
