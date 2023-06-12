@@ -45,9 +45,9 @@ RSpec.describe "Api::V1::Registrations", type: :request do
       end
 
       it "when url are invalid" do
-        params[:url] = "http://localhost:3000"
+        params[:url] = "http://localhost:5820"
         post('/api/registrations', params: params.to_json, headers:)
-        expect(response).to have_http_status(422)
+        expect(response).to have_http_status(401)
       end
     end
 
