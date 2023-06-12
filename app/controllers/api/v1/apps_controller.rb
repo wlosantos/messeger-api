@@ -5,6 +5,8 @@ module Api
 
       def index
         app = App.all
+
+        authorize app
         render json: app, status: :ok
       end
 
@@ -15,6 +17,8 @@ module Api
 
       def create
         app = App.new(app_params)
+        authorize app
+
         if app.save
           render json: app, status: :created
         else
@@ -23,6 +27,7 @@ module Api
       end
 
       def update
+        authorize @app
         if @app.update(app_params)
           render json: @app, status: :ok
         else
@@ -31,6 +36,7 @@ module Api
       end
 
       def destroy
+        authorize @app
         @app.destroy
         head 204
       end

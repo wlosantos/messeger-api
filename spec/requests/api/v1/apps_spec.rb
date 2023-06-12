@@ -2,10 +2,13 @@ require 'rails_helper'
 
 RSpec.describe "Api::V1::Apps", type: :request do
   before { host! "messeger-fractal.com.br" }
+  let(:admin) { create(:user, :admin, name: "Develop App") }
+  let(:token) { JwtAuth::TokenProvider.issue_token({ email: admin.email, fractal_id: admin.fractal_id }) }
   let(:headers) do
     {
       "Accept" => "application/vnd.messeger-fractal.v1",
-      "Content-Type" => Mime[:json].to_s
+      "Content-Type" => Mime[:json].to_s,
+      "Authorization" => "Bearer #{token}"
     }
   end
 
