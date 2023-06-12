@@ -8,6 +8,7 @@ gem "puma", "~> 5.0"
 gem "rails", "~> 7.0.5"
 gem "redis", "~> 4.0"
 
+gem 'active_model_serializers'
 gem 'rolify'
 
 gem "bootsnap", require: false
